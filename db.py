@@ -16,6 +16,9 @@ Base = declarative_base()
 def with_session(fun):
     @functools.wraps(fun)
     def wrapped(*args, **kwargs):
+        if 'session' in kwargs:
+            return fun(*args, **kwargs)
+
         session = Session()
         try:
             result = fun(*args,  session=session, **kwargs)
