@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Table
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Table, UniqueConstraint, func
 from sqlalchemy.orm import relationship
 from db import Base
 
@@ -12,7 +12,8 @@ class UselessModel(Base):
 students_courses_table = Table(
     'students_courses', Base.metadata,
     Column('student_id', Integer, ForeignKey('students.id')),
-    Column('course_id', Integer, ForeignKey('courses.id'))
+    Column('course_id', Integer, ForeignKey('courses.id')),
+    UniqueConstraint('student_id', 'course_id', name='unique_enrollmen_1')
 )
 
 
@@ -20,7 +21,7 @@ class Student(Base):
     __tablename__ = 'students'
 
     id = Column(Integer, primary_key=True)
-    student_no = Column(String(80), nullable=False, unique=True)
+    student_no = Column(String(80), nullable=False, unique=False)
     first_name = Column(String(80), nullable=False)
     last_name = Column(String(80), nullable=False)
     courses = relationship(

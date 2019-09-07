@@ -12,5 +12,7 @@ def example_service(example_argument: int, session=None):
 def enrolling_course(course_id: int, student_id: int, session=None):
     student = session.query(Student).get(student_id)
     course = session.query(Course).get(course_id)
+    if course in student.courses:
+        raise Exception('Already enrolled!')
     student.courses.append(course)
     course.enrolled_no += 1

@@ -20,24 +20,44 @@ def tables(engine, db_schema):
     Base.metadata.create_all(engine)
 
 
-# def test_example_service(dbsession):
-#     assert dbsession.query(UselessModel).count() == 0
-#     some_number = 2
-#
-#     example_service(example_argument=some_number, session=dbsession)
-#
-#     assert dbsession.query(UselessModel).one().number == some_number
+@pytest.fixture(autouse=True)
+def use_transaction(transaction):
+    pass
+
+def test_example_service(dbsession):
+    assert dbsession.query(UselessModel).count() == 0
+    some_number = 2
+
+    example_service(example_argument=some_number, session=dbsession)
+
+    assert dbsession.query(UselessModel).one().number == some_number
 
 
-def test_enrolling(dbsession):
-    student = Student(student_no='AZB123', first_name='John', last_name='Doe')
-    course = Course(name='Maths', exam_type='speaking', enrolled_no=0)
-    dbsession.add(student)
-    dbsession.add(course)
+@pytest.fixture()
+def student(dbsession):
+    student_instance = Student(student_no='AZB123', first_name='John', last_name='Doe')
+    dbsession.add(student_instance)
     dbsession.flush()
+    return student_instance
 
+
+@pytest.fixture()
+def course(dbsession):
+    course_instance = Course(name='Maths', exam_type='speaking', enrolled_no=0)
+    dbsession.add(course_instance)
+    dbsession.flush()
+    return course_instance
+
+
+def test_enrolling(dbsession, student, course):
     enrolling_course(course.id, student.id, session=dbsession)
 
     assert course.enrolled_no == 1
     assert len(course.students) == 1
 
+
+def test_enrolling_twice(dbsession, student, course):
+    enrolling_course(course.id, student.id, session=dbsession)
+
+    with pytest.raises(Exception):
+        enrolling_course(course.id, student.id, session=dbsession)
