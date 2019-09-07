@@ -29,6 +29,11 @@ class Student(Base):
         secondary=students_courses_table,
     )
 
+    @property
+    def grades_avg(self):
+        all_grades = list(self.grades)
+        return sum([x.grade for x in all_grades]) / len(all_grades)
+
 
 class Course(Base):
     __tablename__ = 'courses'
@@ -56,6 +61,6 @@ class Grade(Base):
         nullable=True,
         primary_key=True,
     )
-    created_at = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, nullable=False, server_default=func.now())
     grade = Column(Integer, nullable=False)
-
+    student = relationship("Student", backref="grades")

@@ -1,8 +1,8 @@
 import pytest
 
 from db import dsn, Base
-from models import UselessModel, Student, Course
-from services import example_service, enrolling_course
+from models import UselessModel, Student, Course, Grade
+from services import example_service, enrolling_course, awarding_grade
 
 
 @pytest.fixture(scope='session')
@@ -61,3 +61,22 @@ def test_enrolling_twice(dbsession, student, course):
 
     with pytest.raises(Exception):
         enrolling_course(course.id, student.id, session=dbsession)
+
+
+def test_awarding_grade(dbsession, student, course):
+    grade = 5
+    awarding_grade(course.id, student.id, grade, session=dbsession)
+
+    saved_grade = dbsession.query(Grade).filter(
+        (Grade.student_id == student.id)
+        & (Grade.course_id == course.id)
+    ).one()
+    assert saved_grade.grade == grade
+    assert student.grades_avg == grade
+
+
+def test_awarding_student_avg(dbsession, student, course):
+    grade = 3
+    awarding_grade(course.id, student.id, grade, session=dbsession)
+
+    assert student.grades_avg == grade
