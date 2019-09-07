@@ -15,6 +15,8 @@ def enrolling_course(course_id: int, student_id: int, session=None):
     if course in student.courses:
         raise Exception('Already enrolled!')
     student.courses.append(course)
+
+    student.enroll(course)
     course.enrolled_no += 1
 
 

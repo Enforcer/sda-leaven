@@ -34,6 +34,9 @@ class Student(Base):
         all_grades = list(self.grades)
         return sum([x.grade for x in all_grades]) / len(all_grades)
 
+    def enroll(self, course: Course):
+        self.courses.append(course)
+
 
 class Course(Base):
     __tablename__ = 'courses'
