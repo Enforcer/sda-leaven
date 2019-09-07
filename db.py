@@ -8,6 +8,8 @@ import settings
 
 dsn = f'mysql://{settings.DB_USER}:{settings.DB_PASSWORD}@{settings.DB_HOST}/{settings.DB_NAME}'
 engine = create_engine(dsn, echo=True)
+# jezeli MySQL nie dziala, to sprobujcie tego
+# engine = create_engine('sqlite:///C:\\file.db', echo=True)
 Session = sessionmaker(bind=engine)
 
 Base = declarative_base()

@@ -36,13 +36,13 @@ class Child(Base):
 
 
 """Relacja 1 do wielu"""
-class Parent(Base):
+class Parent2(Base):
     __tablename__ = 'parent'
     id = Column(Integer, primary_key=True)
-    children = relationship("Child")
+    children = relationship("Child2")
 
 
-class Child(Base):
+class Child2(Base):
     __tablename__ = 'child'
     id = Column(Integer, primary_key=True)
     parent_id = Column(Integer, ForeignKey('parent.id'))
@@ -55,12 +55,12 @@ association_table = Table('association', Base.metadata,
 )
 
 
-class Parent(Base):
+class Parent3(Base):
     __tablename__ = 'parent'
     id = Column(Integer, primary_key=True)
     children = relationship("Child", secondary=association_table)
 
 
-class Child(Base):
+class Child3(Base):
     __tablename__ = 'child'
     id = Column(Integer, primary_key=True)
