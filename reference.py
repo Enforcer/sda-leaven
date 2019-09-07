@@ -58,7 +58,9 @@ association_table = Table('association', Base.metadata,
 class Parent3(Base):
     __tablename__ = 'parent'
     id = Column(Integer, primary_key=True)
-    children = relationship("Child", secondary=association_table)
+    children = relationship(
+        "Child", secondary=association_table
+    )
 
 
 class Child3(Base):
