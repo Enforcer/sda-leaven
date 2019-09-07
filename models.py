@@ -26,7 +26,6 @@ class Student(Base):
     courses = relationship(
         "Course",
         secondary=students_courses_table,
-        backref="students",
     )
 
 
@@ -36,6 +35,10 @@ class Course(Base):
     name = Column(String(80), nullable=False)
     exam_type = Column(String(20), nullable=False)
     enrolled_no = Column(Integer, nullable=False)
+    students = relationship(
+        "Student",
+        secondary=students_courses_table,
+    )
 
 
 class Grade(Base):

@@ -39,4 +39,5 @@ def test_enrolling(dbsession):
     enrolling_course(course.id, student.id, session=dbsession)
 
     assert course.enrolled_no == 1
+    assert len(course.students) == 1
 
